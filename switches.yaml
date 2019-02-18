@@ -1,0 +1,21 @@
+#  - platform: rfxtrx
+#    automatic_add: true
+#    devices:
+#      0b110002017e714e01010f70:
+#        name: "1"
+#      0b110002017e714e02000070:
+#        name: "2"
+#broadlink
+- platform: broadlink
+  host: 192.168.2.152
+  mac: "78:0F:77:D9:2E:23"
+  type: rm_mini
+  switches:
+    stereo:
+      friendly_name: "Stereo"
+      command_on: !secret broadlink_stereo_onoff
+      command_off: !secret broadlink_stereo_onoff
+    aircon:
+      friendly_name: "Aircon"
+      command_on: !secret broadlink_aircon_onoff
+      command_off: !secret broadlink_aircon_onoff

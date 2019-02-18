@@ -1,0 +1,6 @@
+turn_stereo_on:
+  sequence:
+    - service: switch.broadlink_send_packet_192_168_0_107
+      data:
+        packet:
+          - "JgCAAA4bGbkRrgpnDEYJOhITCz0RbAUYBUcJPwo/CB4MQgw5CSAMQgkUEBkGQQ1GCBwIGA08DhoLPQ86CR4PHgkABXsAASVMEAAMUgABJUwSAAxQAAEmShEADFEAASZLEgAMUAABJksSAAxQAAEnShEADFIAASVLEgAMUQABJkoSAA0FAAAAAAAAAAA="
