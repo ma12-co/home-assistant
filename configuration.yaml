@@ -11,16 +11,18 @@ homeassistant:
   # C for Celcius, F for Fahrenheit
   temperature_unit: C
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: !secrets home_timezone
+  time_zone: !secret home_timezone
   # Customization file
   customize: !include customize.yaml
 
 #zones that get displayed in the map
 zone:
-  -name: Home
+  -name: homeZone
   latitude: !secret home_latitude
   longitude: !secret home_longitude
   radius: 100
+
+person:
 
 # Show links to resources in log and frontend
 #introduction:
@@ -42,6 +44,19 @@ http:
 # the developers to assist with development of Home Assistant.
 # For more information, please see:
 # https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+
+# Example configuration.yaml entry for the Telegram Bot
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_chat_id
+
+# Example configuration.yaml entry for the notifier
+notify:
+  - name: NOTIFIER_NAME
+    platform: telegram
+    chat_id: !secret telegram_chat_id
 
 updater:
   # Optional, allows Home Assistant developers to focus on popular components.
@@ -65,9 +80,10 @@ map:
 # Track the sun
 sun:
 
-#enables the iOS component
-ios:
-
+asuswrt:
+  host: !secret router_ip
+  username: !secret router_username
+  password: !secret router_password
 # Text to speech
 tts:
   - platform: google
@@ -75,6 +91,12 @@ tts:
 #rfxcomm 433 mhz transciever
 rfxtrx:
   device: /dev/ttyUSB0
+
+#vacuum cleaner
+vacuum:
+  - platform: xiaomi_miio
+    host: 192.168.2.151
+    token: !secret vacuum_token
 
 #weather info
 weather:
@@ -93,35 +115,31 @@ light:
         name: Studio
         model: color1
 
+media_player:
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+
 device_tracker:
+  - platform: asuswrt
+    host: 192.168.2.1
+    new_device_defaults:
+      track_new_devices: true
+      hide_if_away: false
+  - platform: gpslogger
+    new_device_defaults:
+      track_new_devices: true
+      hide_if_away: false
 
-# Sensors
-sensor:
-  - platform: ios
-    automatic_add: true
-  # Weather prediction
-  - platform: yr
-  # RFXCOMM 433 mhz
-  - platform: rfxtrx
-    automatic_add: true
-    devices:
-      0a5207003b0e00bc420189:
-        name: Living
-        data_type:
-          - Humidity
-          - Temperature
-      0a520700480e00b1480369:
-        name: Studio
-        data_type:
-          - Humidity
-          - Temperature
-
-# Switches
-switch: !include switches.yaml
+#system health component
+system_health:
 
 # Cloud
 cloud:
 
+# Other files
+sensor: !include sensors.yaml
+switch: !include switches.yaml
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
